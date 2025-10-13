@@ -1,12 +1,12 @@
-﻿namespace SGA.Tests
+﻿namespace SGA.Tests.GeometricProduct
 {
-    public class Euclidean3DAlgebraTests
+    public class GeometricProductEuclidean3DAlgebraTests
     {
+        public GeometricProductEuclidean3DAlgebraTests() => Algebra.Set(3, 0, 0);
+
         [Fact]
         public void GeometricProduct_VectorSquares_EqualPlusOne()
         {
-            Algebra.Set(3, 0, 0);
-
             // Arrange
             var e1 = Multivector.CreateBaseBlade(1);
             var e2 = Multivector.CreateBaseBlade(2);
@@ -21,8 +21,6 @@
         [Fact]
         public void GeometricProduct_Vectors_AntiCommute()
         {
-            Algebra.Set(3, 0, 0);
-
             // Arrange
             var e1 = Multivector.CreateBaseBlade(1);
             var e2 = Multivector.CreateBaseBlade(2);

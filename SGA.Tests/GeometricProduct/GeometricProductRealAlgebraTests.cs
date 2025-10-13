@@ -1,12 +1,12 @@
-﻿namespace SGA.Tests
+﻿namespace SGA.Tests.GeometricProduct
 {
-    public class RealAlgebraTests
+    public class GeometricProductRealAlgebraTests
     {
+        public GeometricProductRealAlgebraTests() => Algebra.Set(0, 0, 0);
+
         [Fact]
         public void GeometricProduct_RealNumbers_BehavesAsRealMultiplication()
         {
-            Algebra.Set(0, 0, 0);
-
             // Arrange
             var a = new Multivector(3.0); // Número 3
             var b = new Multivector(2.0); // Número 2
@@ -22,8 +22,6 @@
         [Fact]
         public void GeometricProduct_RealNumbers_IsCommutative()
         {
-            Algebra.Set(0, 0, 0);
-
             // Arrange
             var a = new Multivector(4.0);
             var b = new Multivector(5.0);
@@ -40,8 +38,6 @@
         [Fact]
         public void GeometricProduct_RealNumbers_HasIdentityElement()
         {
-            Algebra.Set(0, 0, 0);
-
             // Arrange
             var a = new Multivector(7.0);
             var identity = new Multivector(1.0);
@@ -57,8 +53,6 @@
         [Fact]
         public void GeometricProduct_RealNumbers_HasZeroElement()
         {
-            Algebra.Set(0, 0, 0);
-
             // Arrange
             var a = new Multivector(7.0);
             var zero = new Multivector(0.0);
@@ -74,15 +68,13 @@
         [Fact]
         public void GeometricProduct_RealNumbers_IsAssociative()
         {
-            Algebra.Set(0, 0, 0);
-
             // Arrange
             var a = new Multivector(2.0);
             var b = new Multivector(3.0);
             var c = new Multivector(4.0);
 
             // Act
-            var leftAssociative = (a * b) * c;
+            var leftAssociative = a * b * c;
             var rightAssociative = a * (b * c);
 
             // Assert
@@ -93,8 +85,6 @@
         [Fact]
         public void GeometricProduct_RealNumbers_DistributiveOverAddition()
         {
-            Algebra.Set(0, 0, 0);
-
             // Arrange
             var a = new Multivector(2.0);
             var b = new Multivector(3.0);
@@ -102,7 +92,7 @@
 
             // Act
             var leftDist = a * (b + c);
-            var rightDist = (a * b) + (a * c);
+            var rightDist = a * b + a * c;
 
             // Assert
             Assert.Equal(leftDist[0], rightDist[0], 10);

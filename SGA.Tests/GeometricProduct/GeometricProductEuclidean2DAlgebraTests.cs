@@ -1,12 +1,12 @@
-﻿namespace SGA.Tests
+﻿namespace SGA.Tests.GeometricProduct
 {
-    public class Euclidean2DAlgebraTests
+    public class GeometricProductEuclidean2DAlgebraTests
     {
+        public GeometricProductEuclidean2DAlgebraTests() => Algebra.Set(2, 0, 0);
+
         [Fact]
         public void GeometricProduct_VectorSquares_EqualPlusOne()
         {
-            Algebra.Set(2, 0, 0);
-
             // Arrange
             var e1 = Multivector.CreateBaseBlade(1);
             var e2 = Multivector.CreateBaseBlade(2);
@@ -23,8 +23,6 @@
         [Fact]
         public void GeometricProduct_Vectors_AntiCommute()
         {
-            Algebra.Set(2, 0, 0);
-
             // Arrange
             var e1 = Multivector.CreateBaseBlade(1);
             var e2 = Multivector.CreateBaseBlade(2);
@@ -41,8 +39,6 @@
         [Fact]
         public void GeometricProduct_BivectorSquares_ToMinusOne()
         {
-            Algebra.Set(2, 0, 0);
-
             // Arrange
             var e1 = Multivector.CreateBaseBlade(1);
             var e2 = Multivector.CreateBaseBlade(2);
@@ -58,8 +54,6 @@
         [Fact]
         public void GeometricProduct_VectorReflection()
         {
-            Algebra.Set(2, 0, 0);
-
             // Arrange
             var vector = new Multivector(0, 3.0, 4.0, 0); // 3e1 + 4e2
             var mirror = new Multivector(0, 1.0, 0, 0);   // e1 (espelho no eixo y)

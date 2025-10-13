@@ -55,6 +55,50 @@
             return new Multivector(resultCoefficients);
         }
 
+        /// <summary>
+        /// Wedge product (exterior product) of multivectors
+        /// </summary>
+        public static Multivector operator ^(Multivector a, Multivector b)
+        {
+            var resultCoefficients = new double[Algebra.Dimension];
+
+            /*
+                O produto wedge (produto exterior) entre duas blades é zero se elas compartilharem qualquer vetor base. Caso contrário, é igual ao produto geométrico.
+
+                Propriedades:
+                - Anti-comutativo: A ^ B = -B ^ A
+                - Nilpotente: A ^ A = 0
+                - Associativo: (A ^ B) ^ C = A ^ (B ^ C)
+            */
+
+            for (int i = 0; i < Algebra.Dimension; i++)
+            {
+                if (a[i] == 0.0) continue;
+
+                for (int j = 0; j < Algebra.Dimension; j++)
+                {
+                    if (b[j] == 0.0) continue;
+
+                    /*
+                        Verifica se as blades compartilham vetores base
+                        Se (i & j) != 0, elas compartilham pelo menos um vetor base
+                        Nesse caso, o produto wedge é zero
+                    */
+                    if ((i & j) != 0)
+                    {
+                        continue;
+                    }
+
+                    // Para blades sem vetores em comum, o produto wedge é igual ao produto geométrico
+                    int resultBlade = Algebra.GetGeometricProductMask(i, j);
+                    double sign = Algebra.GetGeometricProductSign(i, j);
+                    resultCoefficients[resultBlade] += sign * a[i] * b[j];
+                }
+            }
+
+            return new Multivector(resultCoefficients);
+        }
+
         public static Multivector operator +(Multivector a, Multivector b)
         {
             var result = new double[a.Dimension];

@@ -174,14 +174,14 @@
 
             // Arrange
             var multivector = new Multivector(
-                1.0,   // escalar
-                0.0,   // e1 (zero)
-                2.0,   // e2  
-                0.0,   // e12 (zero)
-                3.0,   // e3
-                0.0,   // e13 (zero)
-                4.0,   // e23
-                5.0    // e123
+                1.0, // escalar
+                0.0, // e1 (zero)
+                2.0, // e2  
+                0.0, // e12 (zero)
+                3.0, // e3
+                0.0, // e13 (zero)
+                4.0, // e23
+                5.0 // e123
             );
 
             // Act

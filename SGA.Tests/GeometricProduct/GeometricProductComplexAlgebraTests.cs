@@ -1,12 +1,12 @@
-﻿namespace SGA.Tests
+﻿namespace SGA.Tests.GeometricProduct
 {
-    public class ComplexAlgebraTests
+    public class GeometricProductComplexAlgebraTests
     {
+        public GeometricProductComplexAlgebraTests() => Algebra.Set(0, 2, 0);
+
         [Fact]
         public void GeometricProduct_ComplexNumbers_ImaginaryUnitSquaresToMinusOne()
         {
-            Algebra.Set(0, 2, 0);
-
             // Arrange
             var i = new Multivector(0, 0, 0, 1.0); // i = e12
 
@@ -21,8 +21,6 @@
         [Fact]
         public void GeometricProduct_ComplexNumbers_ComplexMultiplication()
         {
-            Algebra.Set(0, 2, 0);
-
             // Arrange
             var z1 = new Multivector(2.0, 0, 0, 3.0); // 2 + 3i
             var z2 = new Multivector(1.0, 0, 0, 4.0); // 1 + 4i
@@ -44,8 +42,6 @@
         [Fact]
         public void GeometricProduct_ComplexNumbers_ComplexConjugation_Corrected()
         {
-            Algebra.Set(0, 2, 0);
-
             // Arrange
             var z = new Multivector(3.0, 0, 0, 4.0); // 3 + 4i
             var conjugate = new Multivector(3.0, 0, 0, -4.0); // 3 - 4i
@@ -62,8 +58,6 @@
         [Fact]
         public void GeometricProduct_ComplexNumbers_CommutativeInEvenSubalgebra()
         {
-            Algebra.Set(0, 2, 0);
-
             // Arrange
             var z1 = new Multivector(2.0, 0, 0, 3.0); // 2 + 3i
             var z2 = new Multivector(1.0, 0, 0, 4.0); // 1 + 4i
@@ -80,8 +74,6 @@
         [Fact]
         public void GeometricProduct_ComplexNumbers_Rotation()
         {
-            Algebra.Set(0, 2, 0);
-
             // Arrange
             var i = new Multivector(0, 0, 0, 1.0); // i = e12
             var realNumber = new Multivector(2.0); // 2 + 0i
@@ -90,18 +82,15 @@
             var rotated = i * realNumber; // i × 2 = 2i
 
             // Assert
-            Assert.Equal(0.0, rotated[0], 10);     // Parte real zero
-            Assert.Equal(2.0, rotated[3], 10);              // Parte imaginária 2
+            Assert.Equal(0.0, rotated[0], 10); // Parte real zero
+            Assert.Equal(2.0, rotated[3], 10); // Parte imaginária 2
         }
 
         [Fact]
         public void GeometricProduct_ComplexNumbers_WithVectors_AntiCommute()
         {
-            Algebra.Set(0, 2, 0);
-
             // Arrange
             var e1 = Multivector.CreateBaseBlade(1); // e1
-            var e2 = Multivector.CreateBaseBlade(2); // e2
             var i = new Multivector(0, 0, 0, 1.0);  // i = e12
 
             // Act

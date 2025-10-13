@@ -121,5 +121,18 @@
 
             return true;
         }
+
+        public bool IsZero()
+        {
+            for (int i = 0; i < Dimension; i++)
+            {
+                if (Math.Abs(_coefficients[i]) > 1e-10)
+                {
+                    return false;
+                }
+            }
+
+            return true;
+        }
     }
 }
