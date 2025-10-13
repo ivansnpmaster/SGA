@@ -52,7 +52,7 @@ var mv = new Multivector(1.0, 2.0, 3.0); // scalar + 2*e1 + 3*e2
 
 ## Internal representation
 
-The multivector is stored as a sparse array of all possible blade coefficients, indexed by the blade's bit representation. For example, in $Cl(3,\,0,\,0)$:
+The multivector is stored as a sparse array of all possible blade coefficients, indexed by the blade's bit representation. For example, in $Cl(3,0,0)$:
 
 - Index 0 (000): scalar
 - Index 1 (001): e1
