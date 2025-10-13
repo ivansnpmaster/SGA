@@ -8,16 +8,16 @@
 
             Exemplo para Algebra(3, 0, 0):
 
-                Índice | Binário | Blade      | Descrição
-                -------|---------|------------|-----------
-                  0    |   000   | 1          | Escalar (grau 0)
-                  1    |   001   | e1         | Vetor base 1 (grau 1)
-                  2    |   010   | e2         | Vetor base 2 (grau 1)
-                  3    |   011   | e1e2       | Bivetor (grau 2)
-                  4    |   100   | e3         | Vetor base 3 (grau 1)
-                  5    |   101   | e1e3       | Bivetor (grau 2)
-                  6    |   110   | e2e3       | Bivetor (grau 2)
-                  7    |   111   | e1e2e3     | Trivetor (grau 3)
+                Índice | Binário | Blade  | Descrição
+                -------|---------|--------|----------------------
+                  0    |   000   | 1      | Escalar (grau 0)
+                  1    |   001   | e1     | Vetor base 1 (grau 1)
+                  2    |   010   | e2     | Vetor base 2 (grau 1)
+                  3    |   011   | e1e2   | Bivetor (grau 2)
+                  4    |   100   | e3     | Vetor base 3 (grau 1)
+                  5    |   101   | e1e3   | Bivetor (grau 2)
+                  6    |   110   | e2e3   | Bivetor (grau 2)
+                  7    |   111   | e1e2e3 | Trivetor (grau 3)
 
             Esta representação permite que cada blade seja identificada unicamente por um índice inteiro, onde cada bit representa a presença (1) ou ausência (0) de um vetor base.
         */
@@ -58,6 +58,39 @@
             return new Multivector(coefficients);
         }
 
+        private static int BladeGrade(int bladeIndex)
+        {
+            // Contar quantos bits 1 aparecem na blade para obter o grau
+
+            int c = 0;
+
+            while (bladeIndex != 0)
+            {
+                // Remove o bit 1 menos significativo:
+                // ex: x = 011010 -> x-1 = 011001 -> x & (x-1) = 011000
+                bladeIndex &= (bladeIndex - 1);
+                c++;
+            }
+
+            return c;
+        }
+
+        public Multivector GradeProjection(int k)
+        {
+            // Retorna a parte homogênea de grau 'k' do multivetor
+            // Percorre todas as blades: se ela tem popcount == k, copia o coeficiente
+
+            var res = new double[Dimension];
+
+            for (int blade = 0; blade < Dimension; blade++)
+            {
+                if (BladeGrade(blade) == k)
+                    res[blade] = _coefficients[blade];
+            }
+
+            return new Multivector(res);
+        }
+
         public override string ToString()
         {
             var parts = new List<string>();
@@ -88,7 +121,7 @@
 
             var vectors = new List<int>();
 
-            for (int i = 0; i < Algebra.Dimension; i++)
+            for (int i = 0; i < Algebra.N; i++)
             {
                 // Cria uma máscara para o i-ésimo bit
                 int bitMask = 1 << i;
@@ -122,17 +155,32 @@
             return true;
         }
 
-        public bool IsZero()
+        public bool IsZero(double tolerance = 0.0)
         {
-            for (int i = 0; i < Dimension; i++)
+            if (tolerance == 0.0)
             {
-                if (Math.Abs(_coefficients[i]) > 1e-10)
+                for (int i = 0; i < Dimension; i++)
                 {
-                    return false;
+                    if (_coefficients[i] != 0.0)
+                    {
+                        return false;
+                    }
                 }
-            }
 
-            return true;
+                return true;
+            }
+            else
+            {
+                for (int i = 0; i < Dimension; i++)
+                {
+                    if (Math.Abs(_coefficients[i]) > tolerance)
+                    {
+                        return false;
+                    }
+                }
+
+                return true;
+            }
         }
     }
 }
