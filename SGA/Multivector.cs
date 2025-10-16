@@ -8,8 +8,8 @@
 
             Example for Algebra(3, 0, 0):
 
-                Index | Binary | Blade   | Description
-                ------|--------|---------|----------------------
+                Index | Binary | Blade  | Description
+                ------|--------|--------|----------------------
                   0   | 000    | 1      | Scalar (grade 0)
                   1   | 001    | e1     | Basis vector 1 (grade 1)
                   2   | 010    | e2     | Basis vector 2 (grade 1)
