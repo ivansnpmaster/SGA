@@ -8,25 +8,25 @@
         public static int N { get; private set; }
         public static int Dimension { get; private set; }
 
-        // Armazena a operação XOR entre a blade i e a blade j (máscara resultante das blades)
+        // Stores the XOR operation between blade i and blade j (resulting blade mask)
         private static int[,] _geometricProductMasks;
-        // Armazena o sinal do produto geométrico entre a blade i e a blade j
+        // Stores the sign of the geometric product between blade i and blade j
         private static double[,] _geometricProductSigns;
 
         public static void Set(int p, int q, int r)
         {
-            P = p;  // Vetores com e² = +1 (espaciais)
-            Q = q;  // Vetores com e² = -1 (temporais)
-            R = r;  // Vetores com e² = 0 (nilpotentes)
+            P = p;  // Vectors with e² = +1 (spatial)
+            Q = q;  // Vectors with e² = -1 (temporal)
+            R = r;  // Vectors with e² = 0 (nilpotent)
 
-            // Número total de vetores base (P + Q + R)
+            // Total number of basis vectors (P + Q + R)
             N = p + q + r;
 
-            // Dimension: Número total de blades (componentes) no multivector
-            // Isto é calculado como 2^N usando operação de deslocamento de bits
+            // Dimension: Total number of blades (components) in the multivector
+            // This is calculated as 2^N using bit shifting
             Dimension = 1 << N;
 
-            // Pré-cômputo das máscaras e sinais resultantes de um produto geométrico entre as blades
+            // Precompute the masks and signs resulting from a geometric product between blades
             PrecomputeAllGeometricProductMasksAndSigns();
         }
 
@@ -48,34 +48,34 @@
         private static double ComputeSingleGeometricProductSign(int bladeA, int bladeB)
         {
             /*
-                O algoritmo possui duas partes:
+                The algorithm has two parts:
 
-                1. Cálculo do sinal da reordenação:
-                    Para cada vetor em B, contamos quantos vetores em A têm índice MAIOR que ele.
-                    Cada um desses pares contribui com um fator -1 para o sinal.
+                1. Reordering sign calculation:
+                   For each vector in B, count how many vectors in A have a HIGHER index.
+                   Each such pair contributes a factor of -1 to the sign.
 
-                2. Cálculo da contração:
-                    Para cada vetor que aparece em AMBAS as blades, multiplicamos pela métrica do vetor (seu "quadrado": +1, -1 ou 0).
-                
-                Fundamentação matemática:
-                    O produto geométrico pode ser visto como:
-                        A × B = (-1)^(N) × (produto das métricas dos vetores comuns) × (A XOR B)
-                    onde N é o número de pares (i,j) com i em A, j em B, e i > j.
+                2. Contraction calculation:
+                   For each vector that appears in BOTH blades, multiply by the metric of the vector (its square: +1, -1, or 0).
+
+                Mathematical foundation:
+                   The geometric product can be seen as:
+                       A × B = (-1)^(N) × (product of the metrics of common vectors) × (A XOR B)
+                   where N is the number of pairs (i,j) with i in A, j in B, and i > j.
             */
 
-            // Sinal default
+            // Default sign
             double sign = 1.0;
 
-            // Cálculo do sinal da reordenação
+            // Reordering sign calculation
             for (int i = 0; i < N; i++)
             {
-                // Verifica se o i-ésimo vetor está presente em B
+                // Check if the i-th vector is present in B
                 int bitI = 1 << i;
                 bool isInBladeB = (bladeB & bitI) != 0;
 
                 if (isInBladeB)
                 {
-                    // Para cada vetor em A com índice MAIOR que i
+                    // For each vector in A with index GREATER than i
                     for (int j = i + 1; j < N; j++)
                     {
                         int bitJ = 1 << j;
@@ -84,54 +84,54 @@
                         if (isInBladeA)
                         {
                             /*
-                                Ao entrar neste if, encontramos um par que requer troca:
-                                    O vetor B[i] precisa passar pelo vetor A[j] na reordenação.
-                                    Cada passagem introduz um fator -1 no sinal.
+                                When entering this if, we find a pair that requires swapping:
+                                The vector B[i] needs to pass through vector A[j] in the reordering.
+                                Each swap introduces a factor of -1 in the sign.
 
-                                Na álgebra geométrica: e_j × e_i = -e_i × e_j quando i ≠ j
-                                Portanto, cada vez que um vetor de índice menor (i) precisa passar por um vetor de índice maior (j), o sinal muda.
+                                In geometric algebra: e_j × e_i = -e_i × e_j when i ≠ j
+                                Therefore, every time a lower-index vector (i) needs to pass through a higher-index vector (j), the sign changes.
                             */
 
                             sign *= -1.0;
 
-                            // Exemplo:
+                            // Example:
                             // bladeA = e2 (bit 1), bladeB = e1 (bit 0)
-                            // i=0 (e1 em B), j=1 (e2 em A) → e1 precisa passar por e2
-                            // e2 × e1 = -e1 × e2 → sinal = -1
+                            // i=0 (e1 in B), j=1 (e2 in A) → e1 needs to pass through e2
+                            // e2 × e1 = -e1 × e2 → sign = -1
                         }
                     }
                 }
             }
 
-            // Cálculo da contração
+            // Contraction calculation
             for (int i = 0; i < N; i++)
             {
                 int bitI = 1 << i;
 
-                // Verifica se o vetor está presente em AMBAS as blades
+                // Check if the vector is present in BOTH blades
                 bool isInBladeA = (bladeA & bitI) != 0;
                 bool isInBladeB = (bladeB & bitI) != 0;
 
                 if (isInBladeA && isInBladeB)
                 {
                     /*
-                        Ao entrar neste if, encontramos um vetor comum: o sinal de sua métrica contribui no produto
-                        Se um vetor aparece em ambas as blades, ele se "contrai":
-                            e_i × e_i = Q(e_i) onde Q é a métrica do vetor.
+                        When entering this if, we find a common vector: its metric sign contributes to the product
+                        If a vector appears in both blades, it "contracts":
+                            e_i × e_i = Q(e_i) where Q is the metric of the vector.
 
-                        Exemplos:
-                            Se e_i tem quadrado +1: e_i × e_i = +1
-                            Se e_i tem quadrado -1: e_i × e_i = -1
-                            Se e_i tem quadrado 0: e_i × e_i = 0
+                        Examples:
+                            If e_i squares to +1: e_i × e_i = +1
+                            If e_i squares to -1: e_i × e_i = -1
+                            If e_i squares to 0:  e_i × e_i = 0
                     */
 
                     double vectorSquare = GetVectorSquare(i);
                     sign *= vectorSquare;
 
                     /*
-                         Exemplo:
+                         Example:
                             bladeA = e1e2, bladeB = e1e3, common = e1
-                            e1 tem quadrado -1 (em álgebra (0,2,0))
+                            e1 squares to -1 (in algebra (0,2,0))
                             sign = sign × (-1) = -sign
                     */
                 }

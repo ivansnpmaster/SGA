@@ -3,23 +3,23 @@
     public partial class Multivector
     {
         /*
-            _coefficients: Array que armazena os coeficientes de TODAS as blades possíveis
-            O índice no array corresponde ao "tipo" da blade usando representação por bits:
+            _coefficients: Array that stores the coefficients of ALL possible blades.
+            The index in the array corresponds to the blade's "type" using bitwise representation:
 
-            Exemplo para Algebra(3, 0, 0):
+            Example for Algebra(3, 0, 0):
 
-                Índice | Binário | Blade  | Descrição
-                -------|---------|--------|----------------------
-                  0    |   000   | 1      | Escalar (grau 0)
-                  1    |   001   | e1     | Vetor base 1 (grau 1)
-                  2    |   010   | e2     | Vetor base 2 (grau 1)
-                  3    |   011   | e1e2   | Bivetor (grau 2)
-                  4    |   100   | e3     | Vetor base 3 (grau 1)
-                  5    |   101   | e1e3   | Bivetor (grau 2)
-                  6    |   110   | e2e3   | Bivetor (grau 2)
-                  7    |   111   | e1e2e3 | Trivetor (grau 3)
+                Index | Binary | Blade   | Description
+                ------|--------|---------|----------------------
+                  0   | 000    | 1      | Scalar (grade 0)
+                  1   | 001    | e1     | Basis vector 1 (grade 1)
+                  2   | 010    | e2     | Basis vector 2 (grade 1)
+                  3   | 011    | e1e2   | Bivector (grade 2)
+                  4   | 100    | e3     | Basis vector 3 (grade 1)
+                  5   | 101    | e1e3   | Bivector (grade 2)
+                  6   | 110    | e2e3   | Bivector (grade 2)
+                  7   | 111    | e1e2e3 | Trivector (grade 3)
 
-            Esta representação permite que cada blade seja identificada unicamente por um índice inteiro, onde cada bit representa a presença (1) ou ausência (0) de um vetor base.
+            This representation allows each blade to be uniquely identified by an integer index, where each bit represents the presence (1) or absence (0) of a basis vector.
         */
         private readonly double[] _coefficients;
 
@@ -27,21 +27,21 @@
         {
             if (coefficients.Length < Algebra.Dimension)
             {
-                // Cria um novo array do tamanho exato da álgebra (todos zeros por padrão)
+                // Creates a new array with the exact size of the algebra (all zeros by default)
                 _coefficients = new double[Algebra.Dimension];
 
-                // Copia os coeficientes fornecidos para o início do array
-                // O restante permanece zero automaticamente
+                // Copies the provided coefficients to the beginning of the array
+                // The rest remains zero automatically
                 Array.Copy(coefficients, _coefficients, coefficients.Length);
             }
             else if (coefficients.Length > Algebra.Dimension)
             {
-                // Array maior que a dimensão da álgebra - isto é um erro
-                throw new ArgumentException($"DIMENSIONALIDADE INCOMPATÍVEL: Fornecidos {coefficients.Length} coeficientes, mas a álgebra configurada suporta apenas {Algebra.Dimension}. Verifique a assinatura da álgebra ou ajuste o número de coeficientes.");
+                // Array larger than the algebra dimension - this is an error
+                throw new ArgumentException($"INCOMPATIBLE DIMENSIONALITY: Provided {coefficients.Length} coefficients, but the configured algebra supports only {Algebra.Dimension}. Check the algebra signature or adjust the number of coefficients.");
             }
             else
             {
-                // Caso perfeito: array do tamanho exato
+                // Perfect case: array of exact size
                 _coefficients = coefficients;
             }
         }
@@ -60,13 +60,13 @@
 
         private static int BladeGrade(int bladeIndex)
         {
-            // Contar quantos bits 1 aparecem na blade para obter o grau
+            // Count how many 1 bits appear in the blade to get the grade
 
             int c = 0;
 
             while (bladeIndex != 0)
             {
-                // Remove o bit 1 menos significativo:
+                // Remove the least significant 1 bit:
                 // ex: x = 011010 -> x-1 = 011001 -> x & (x-1) = 011000
                 bladeIndex &= (bladeIndex - 1);
                 c++;
@@ -77,8 +77,8 @@
 
         public Multivector GradeProjection(int k)
         {
-            // Retorna a parte homogênea de grau 'k' do multivetor
-            // Percorre todas as blades: se ela tem popcount == k, copia o coeficiente
+            // Returns the homogeneous part of grade 'k' of the multivector
+            // Iterates over all blades: if it has popcount == k, copies the coefficient
 
             var res = new double[Dimension];
 
@@ -100,7 +100,7 @@
                 if (_coefficients[i] != 0.0)
                 {
                     string bladeName = GetBladeName(i);
-                    // CultureInfo.InvariantCulture para garantir ponto decimal
+                    // CultureInfo.InvariantCulture to ensure decimal point
                     parts.Add($"{_coefficients[i].ToString("F4", System.Globalization.CultureInfo.InvariantCulture)}*{bladeName}");
                 }
             }
@@ -113,9 +113,9 @@
 
         private static string GetBladeName(int bladeIndex)
         {
-            // Converte um índice de blade (representação binária) para um nome legível, como "e1", "e12", "e123", etc.
+            // Converts a blade index (binary representation) to a readable name, like "e1", "e12", "e123", etc.
 
-            // Blade 0 é sempre o escalar (representado como "1")
+            // Blade 0 is always the scalar (represented as "1")
             if (bladeIndex == 0)
                 return "1";
 
@@ -123,24 +123,24 @@
 
             for (int i = 0; i < Algebra.N; i++)
             {
-                // Cria uma máscara para o i-ésimo bit
+                // Create a mask for the i-th bit
                 int bitMask = 1 << i;
 
-                // Verifica se este bit está definido na blade
+                // Check if this bit is set in the blade
                 bool isBitSet = (bladeIndex & bitMask) != 0;
 
                 if (isBitSet)
                 {
-                    // Se o bit está definido, o vetor e_(i+1) está presente
-                    // Adiciona (i + 1) porque os vetores começam em e1, não e0
+                    // If the bit is set, the vector e_(i+1) is present
+                    // Add (i + 1) because vectors start at e1, not e0
                     vectors.Add(i + 1);
                 }
             }
 
-            // Ordena os vetores por índice para consistência
+            // Sort the vectors by index for consistency
             vectors.Sort();
 
-            // Constrói o nome no formato "e" seguido pelos números dos vetores
+            // Build the name in the format "e" followed by the vector numbers
             return "e" + string.Join("", vectors);
         }
 

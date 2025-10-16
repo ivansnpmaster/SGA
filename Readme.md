@@ -30,16 +30,16 @@ Console.WriteLine(bivector); // Output: 1.0000*e12
 ## Internal representation
 Multivectors are stored as arrays of coefficients, indexed by the blade's bit pattern. For $\mathcal{C}\ell(3,0,0)$:
 
-| Index | Binary | Blade   | Description        |
-|-------|--------|---------|-------------------|
-| 0     | 000    | 1       | Scalar            |
-| 1     | 001    | e1      | Basis vector 1    |
-| 2     | 010    | e2      | Basis vector 2    |
-| 3     | 011    | e1e2    | Bivector          |
-| 4     | 100    | e3      | Basis vector 3    |
-| 5     | 101    | e1e3    | Bivector          |
-| 6     | 110    | e2e3    | Bivector          |
-| 7     | 111    | e1e2e3  | Trivector         |
+| Index | Binary | Blade     | Description        |
+|-------|--------|-----------|-------------------|
+| 0     | 000    | $1$       | Scalar            |
+| 1     | 001    | $e_1$     | Basis vector 1    |
+| 2     | 010    | $e_2$     | Basis vector 2    |
+| 3     | 011    | $e_{12}$  | Bivector          |
+| 4     | 100    | $e_3$     | Basis vector 3    |
+| 5     | 101    | $e_{13}$  | Bivector          |
+| 6     | 110    | $e_{23}$  | Bivector          |
+| 7     | 111    | $e_{123}$ | Trivector         |
 
 Each blade is uniquely identified by its index, with each bit representing the presence (1) or absence (0) of a basis vector.
 
