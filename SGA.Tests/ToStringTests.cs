@@ -134,7 +134,7 @@
             var result = multivector.ToString();
 
             // Assert
-            Assert.Equal("1.2346*1", result); // Deve arredondar para 4 casas decimais
+            Assert.Equal("1.2346*1", result); // Should round to 4 decimal places
         }
 
         [Fact]
@@ -174,7 +174,7 @@
 
             // Arrange
             var multivector = new Multivector(
-                1.0, // escalar
+                1.0, // scalar
                 0.0, // e1 (zero)
                 2.0, // e2  
                 0.0, // e12 (zero)
@@ -203,7 +203,7 @@
             var result = multivector.ToString();
 
             // Assert
-            // Coeficientes muito pequenos devem ser formatados com notação decimal
+            // Very small coefficients should be formatted with decimal notation
             Assert.Equal("0.0001*1 + 0.0001*e1", result);
         }
 
@@ -236,7 +236,7 @@
             var result = product.ToString();
 
             // Assert
-            // O formato deve ser consistente mesmo após operações
+            // The format should be consistent even after operations
             Assert.Matches(@"^-?\d+\.\d{4}\*\d?e?\d*(\s\+\s-?\d+\.\d{4}\*\d?e?\d*)*$", result);
         }
     }

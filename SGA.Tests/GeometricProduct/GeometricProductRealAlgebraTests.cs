@@ -8,8 +8,8 @@
         public void GeometricProduct_RealNumbers_BehavesAsRealMultiplication()
         {
             // Arrange
-            var a = new Multivector(3.0); // Número 3
-            var b = new Multivector(2.0); // Número 2
+            var a = new Multivector(3.0); // Number 3
+            var b = new Multivector(2.0); // Number 2
 
             // Act
             var product = a * b;

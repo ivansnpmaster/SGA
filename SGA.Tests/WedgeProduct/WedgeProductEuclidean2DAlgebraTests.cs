@@ -84,13 +84,13 @@
         public void WedgeProduct_AreaComputation_CorrectForParallelogram()
         {
             // Arrange
-            var v1 = new Multivector(0.0, 3.0, 0.0); // Base = 3
-            var v2 = new Multivector(0.0, 1.0, 4.0); // Altura = 4
+            var v1 = new Multivector(0.0, 3.0); // Base = 3
+            var v2 = new Multivector(0.0, 1.0, 4.0); // Height = 4
 
             // Act
             var areaBivector = v1 ^ v2;
 
-            // Assert - área = 3*4 = 12
+            // Assert - area = 3*4 = 12
             Assert.Equal(12.0, areaBivector[3], 10);
         }
 
@@ -132,7 +132,7 @@
         {
             // Arrange
             var scalar = new Multivector(2.0);
-            var vector = new Multivector(0.0, 3.0, 0.0);
+            var vector = new Multivector(0.0, 3.0);
             var bivector = new Multivector(0.0, 0.0, 0.0, 4.0);
 
             // Act & Assert
@@ -145,7 +145,7 @@
         public void WedgeProduct_ZeroVector_AnnihilatesAll()
         {
             // Arrange
-            var zero = new Multivector(0.0, 0.0, 0.0);
+            var zero = new Multivector();
             var e1 = Multivector.CreateBaseBlade(1);
             var e2 = Multivector.CreateBaseBlade(2);
             var e12 = e1 ^ e2;
@@ -156,6 +156,61 @@
             Assert.True((zero ^ e12).IsZero());
             Assert.True((e1 ^ zero).IsZero());
             Assert.True((e12 ^ zero).IsZero());
+        }
+
+        [Fact]
+        public void WedgeProduct_BivectorWithBivector_IsZeroIn2D()
+        {
+            // Arrange
+            var e12 = Multivector.CreateBaseBlade(3); // only bivector in 2D
+
+            // Act
+            var result = e12 ^ e12;
+
+            // Assert
+            Assert.True(result.IsZero());
+        }
+
+        [Fact]
+        public void WedgeProduct_ScalarWithScalar_IsScalar()
+        {
+            // Arrange
+            var s1 = new Multivector(2.0);
+            var s2 = new Multivector(3.0);
+
+            // Act
+            var result = s1 ^ s2;
+
+            // Assert
+            Assert.Equal(6.0, result[0], 10); // 2 * 3 = 6
+        }
+
+        [Fact]
+        public void WedgeProduct_VectorWithBivector_OrthogonalProducesZero()
+        {
+            // Arrange
+            var e1 = Multivector.CreateBaseBlade(1);
+            var e12 = Multivector.CreateBaseBlade(3);
+
+            // Act
+            var result = e1 ^ e12;
+
+            // Assert
+            Assert.True(result.IsZero());
+        }
+
+        [Fact]
+        public void WedgeProduct_BivectorWithVector_OrthogonalProducesZero()
+        {
+            // Arrange
+            var e2 = Multivector.CreateBaseBlade(2);
+            var e12 = Multivector.CreateBaseBlade(3);
+
+            // Act
+            var result = e12 ^ e2;
+
+            // Assert
+            Assert.True(result.IsZero());
         }
     }
 }

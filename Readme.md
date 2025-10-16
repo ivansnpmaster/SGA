@@ -1,92 +1,60 @@
 # SGA - Simple Geometric Algebra
 
-A .NET library for Geometric Algebra computation.
+A .NET 8 library for Geometric Algebra computation with arbitrary signatures.
 
 ## Features
+- Multivector operations: addition, subtraction, geometric product (`*`), wedge product (`^`), negation
+- Support for custom algebra signatures: Euclidean, pseudo-Euclidean, degenerate
+- Dense array representation for all blades, indexed by bitwise basis vector presence
+- Operator overloading for natural C# syntax
+- Grade projection and blade extraction
+- Human-readable output for multivectors
+- Comprehensive unit tests
 
-- Sparse multivector implementation and basic operations
-- Support for different signatures ($p$, $q$, $r$)
-- Overloaded operators for intuitive syntax
-- Pre-computed tables for performance
-- Unit tests
-
-## Basic usage
-
+## Example usage
 ```csharp
 using SGA;
 
-// Configure 3D Euclidean algebra
-Algebra.Set(3, 0, 0);
-
-// Create basis vectors
+Algebra.Set(3, 0, 0); // 3D Euclidean algebra
 var e1 = Multivector.CreateBaseBlade(1);
 var e2 = Multivector.CreateBaseBlade(2);
+var e3 = Multivector.CreateBaseBlade(4);
 
-// Operations
-var bivector = e1 * e2;
-var sum = e1 + e2;
-var negated = -e1;
+var bivector = e1 ^ e2; // e12
+var trivector = e1 ^ e2 ^ e3; // e123
+var gp = e1 * e2; // geometric product
 
-// Create custom multivector
-var mv = new Multivector(1.0, 2.0, 3.0); // scalar + 2*e1 + 3*e2
+Console.WriteLine(bivector); // Output: 1.0000*e12
 ```
-
-## Main API
-
-### Multivector
-- `Multivector(params double[] coefficients)` - Constructor
-- `this[int bladeIndex]` - Coefficient accessor
-- `Dimension` - Multivector dimension
-- `IsScalar()` - Checks if purely scalar
-- `ToString()` - Human-readable representation
-
-### Operators
-- `+`, `-` - Addition and subtraction
-- `*` - Geometric product and scalar multiplication
-- `-` (unary) - Negation
-
-### Algebra
-- `Set(int p, int q, int r)` - Configure signature
-- `Dimension` - Total algebra dimension
-- `P, Q, R, N` - Signature parameters
 
 ## Internal representation
+Multivectors are stored as arrays of coefficients, indexed by the blade's bit pattern. For $\mathcal{C}\ell(3,0,0)$:
 
-The multivector is stored as a sparse array of all possible blade coefficients, indexed by the blade's bit representation. For example, in $\mathcal{C}\ell(3,0,0)$:
+| Index | Binary | Blade   | Description        |
+|-------|--------|---------|-------------------|
+| 0     | 000    | 1       | Scalar            |
+| 1     | 001    | e1      | Basis vector 1    |
+| 2     | 010    | e2      | Basis vector 2    |
+| 3     | 011    | e1e2    | Bivector          |
+| 4     | 100    | e3      | Basis vector 3    |
+| 5     | 101    | e1e3    | Bivector          |
+| 6     | 110    | e2e3    | Bivector          |
+| 7     | 111    | e1e2e3  | Trivector         |
 
-- Index 0 (000): scalar
-- Index 1 (001): $e_1$
-- Index 2 (010): $e_2$
-- Index 3 (011): $e_1e_2$
-- Index 4 (100): $e_3$
-- Index 5 (101): $e_1e_3$
-- Index 6 (110): $e_2e_3$
-- Index 7 (111): $e_1e_2e_3$
+Each blade is uniquely identified by its index, with each bit representing the presence (1) or absence (0) of a basis vector.
 
-This sparse representation is efficient for low to medium dimensions.
-
-## Example
-
-```csharp
-// Configure 2D algebra
-Algebra.Set(2, 0, 0);
-
-// Create vectors
-var v1 = new Multivector(0.0, 1.0); // e1
-var v2 = new Multivector(0.0, 0.0, 1.0); // e2
-
-// Geometric product
-var result = v1 * v2; // e1e2
-
-Console.WriteLine(result); // "1.0000*e12"
-```
+## Main API
+- `Algebra.Set(int p, int q, int r)` - Set algebra signature
+- `Multivector(params double[] coefficients)` - Create a multivector
+- `Multivector.CreateBaseBlade(int index)` - Create a basis blade
+- `GradeProjection(int k)` - Extract homogeneous part of grade k
+- `ToString()` - Human-readable output
+- Operators: `+`, `-`, `*`, `^`
 
 ## Testing
-
 ```bash
 dotnet test
 ```
 
 ## Status
-
-Version 1.0 - Basic features implemented
+Stable - Version 1.0

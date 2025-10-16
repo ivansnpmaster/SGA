@@ -1,2 +1,2 @@
-﻿// Desabilitar execução de testes de forma paralela
+﻿// Disable parallel test execution
 [assembly: CollectionBehavior(DisableTestParallelization = true)]

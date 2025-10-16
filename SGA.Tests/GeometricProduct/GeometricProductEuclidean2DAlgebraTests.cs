@@ -56,14 +56,14 @@
         {
             // Arrange
             var vector = new Multivector(0, 3.0, 4.0, 0); // 3e1 + 4e2
-            var mirror = new Multivector(0, 1.0, 0, 0);   // e1 (espelho no eixo y)
+            var mirror = new Multivector(0, 1.0, 0, 0);   // e1 (mirror on y axis)
 
-            // Act - Reflexão: v' = -m × v × m
+            // Act - Reflection: v' = -m × v × m
             var reflected = (-mirror) * vector * mirror;
 
-            // Assert - Reflexão no eixo y deve inverter componente x
-            Assert.Equal(-3.0, reflected[1], 10); // Componente x invertida
-            Assert.Equal(4.0, reflected[2], 10);  // Componente y mantida
+            // Assert - Reflection on y axis should invert x component
+            Assert.Equal(-3.0, reflected[1], 10); // x component inverted
+            Assert.Equal(4.0, reflected[2], 10);  // y component unchanged
         }
     }
 }
