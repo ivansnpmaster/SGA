@@ -3,36 +3,49 @@ name: Unit tests
 on:
   push:
     branches:
-      - '**' # Run on any branch whenever a push occurs
-  pull_request: # Also run when a pull request is opened or updated
+      - '**' # Run on any branch on push
+  pull_request: # Also run on pull requests
 
 jobs:
   test:
-    # Operating system of the runner (virtual machine)
     runs-on: ubuntu-latest
 
     steps:
-      # Checkout the repository to get the source code on the runner
+      # Checkout the repository
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      # Setup the required .NET SDK version
+      # Setup .NET SDK
       - name: Setup .NET
         uses: actions/setup-dotnet@v4
         with:
-          dotnet-version: 8.0.x   # "x" means use the latest patch of .NET 8.0
+          dotnet-version: 8.0.x   # Latest patch of .NET 8.0
 
-      # Restore all NuGet dependencies for the project
+      # Restore NuGet packages
       - name: Restore dependencies
         run: dotnet restore
 
-      # Build the project in Release configuration
+      # Build the project in Release mode
       - name: Build
         run: dotnet build --no-restore --configuration Release
-        # --no-restore skips restoring packages because it was done in the previous step
 
-      # Run all unit tests with native GitHub annotations
-      - name: Run tests with GitHub native annotations
-        run: dotnet test --no-build --configuration Release --logger "GitHubActions"
-        # --no-build skips compilation since build was done before
-        # --logger "GitHubActions" produces native test annotations in GitHub:
+      # Run tests and generate TRX report
+      - name: Run tests
+        run: dotnet test --no-build --configuration Release --logger "trx;LogFileName=test_results.trx" --verbosity normal
+
+      # Publish test results to GitHub as native checks
+      - name: Publish Test Results
+        uses: dorny/test-reporter@v1
+        with:
+          name: Unit Tests
+          path: '**/TestResults/*.trx'
+          reporter: vstest
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+
+      # Print a simple summary in the workflow log
+      - name: Show test summary
+        run: |
+          PASSED=$(grep "<UnitTestResult outcome=\"Passed\"" **/TestResults/*.trx | wc -l)
+          FAILED=$(grep "<UnitTestResult outcome=\"Failed\"" **/TestResults/*.trx | wc -l)
+          SKIPPED=$(grep "<UnitTestResult outcome=\"NotExecuted\"" **/TestResults/*.trx | wc -l)
+          echo "✅ $PASSED passed, ❌ $FAILED failed, ⚠️ $SKIPPED skipped"
