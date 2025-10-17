@@ -1,0 +1,40 @@
+name: Unit tests
+
+on:
+  push:
+    branches:
+      - '**' # Run on any branch every time a push occurs
+  pull_request: # Also run when a pull request is opened or updated
+
+# Jobs
+jobs:
+  test:
+    # Operating system of the runner
+    runs-on: ubuntu-latest
+
+    # List of steps to execute in order
+    steps:
+      # Checkout the repository to get the source code on the runner
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      # Setup the required .NET SDK version
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 8.0.x
+
+      # Restore all NuGet packages for the project
+      - name: Restore dependencies
+        run: dotnet restore
+
+      # Build the project in Release configuration
+      - name: Build
+        run: dotnet build --no-restore --configuration Release
+        # --no-restore avoids downloading packages again since it was done in the previous step
+
+      # Run all unit tests
+      - name: Run tests
+        run: dotnet test --no-build --configuration Release --verbosity normal
+        # --no-build avoids recompiling the project
+        # --verbosity normal displays detailed test results in the log
