@@ -3,7 +3,7 @@ name: Unit tests
 on:
   push:
     branches:
-      - '**' # Run on any branch on push
+      - '**' # Run on any branch whenever a push occurs
   pull_request: # Also run on pull requests
 
 jobs:
@@ -11,15 +11,15 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      # Checkout the repository
+      # Checkout the repository to get source code
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      # Setup .NET SDK
+      # Setup the required .NET SDK
       - name: Setup .NET
         uses: actions/setup-dotnet@v4
         with:
-          dotnet-version: 8.0.x   # Latest patch of .NET 8.0
+          dotnet-version: 8.0.x
 
       # Restore NuGet packages
       - name: Restore dependencies
@@ -37,12 +37,12 @@ jobs:
       - name: Publish Test Results
         uses: dorny/test-reporter@v1
         with:
-          name: Unit Tests
-          path: '**/TestResults/*.trx'
-          reporter: vstest
-          github_token: ${{ secrets.GITHUB_TOKEN }}
+          name: Unit tests # Display name of the check
+          path: '**/TestResults/*.trx' # Path to TRX files
+          reporter: dotnet-trx # Correct reporter for dotnet TRX files
+          token: ${{ secrets.GITHUB_TOKEN }} # Required GitHub token for publishing checks
 
-      # Print a simple summary in the workflow log
+      # Show a quick summary in workflow logs
       - name: Show test summary
         run: |
           PASSED=$(grep "<UnitTestResult outcome=\"Passed\"" **/TestResults/*.trx | wc -l)
