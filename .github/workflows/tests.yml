@@ -3,16 +3,14 @@ name: Unit tests
 on:
   push:
     branches:
-      - '**' # Run on any branch every time a push occurs
+      - '**' # Run on any branch whenever a push occurs
   pull_request: # Also run when a pull request is opened or updated
 
-# Jobs
 jobs:
   test:
-    # Operating system of the runner
+    # Operating system of the runner (virtual machine)
     runs-on: ubuntu-latest
 
-    # List of steps to execute in order
     steps:
       # Checkout the repository to get the source code on the runner
       - name: Checkout repository
@@ -22,19 +20,19 @@ jobs:
       - name: Setup .NET
         uses: actions/setup-dotnet@v4
         with:
-          dotnet-version: 8.0.x
+          dotnet-version: 8.0.x   # "x" means use the latest patch of .NET 8.0
 
-      # Restore all NuGet packages for the project
+      # Restore all NuGet dependencies for the project
       - name: Restore dependencies
         run: dotnet restore
 
       # Build the project in Release configuration
       - name: Build
         run: dotnet build --no-restore --configuration Release
-        # --no-restore avoids downloading packages again since it was done in the previous step
+        # --no-restore skips restoring packages because it was done in the previous step
 
-      # Run all unit tests
-      - name: Run tests
-        run: dotnet test --no-build --configuration Release --verbosity normal
-        # --no-build avoids recompiling the project
-        # --verbosity normal displays detailed test results in the log
+      # Run all unit tests with native GitHub annotations
+      - name: Run tests with GitHub native annotations
+        run: dotnet test --no-build --configuration Release --logger "GitHubActions"
+        # --no-build skips compilation since build was done before
+        # --logger "GitHubActions" produces native test annotations in GitHub:
