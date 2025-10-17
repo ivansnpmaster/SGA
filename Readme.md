@@ -1,6 +1,6 @@
 # SGA - Simple Geometric Algebra
 
-A .NET 8 library for Geometric Algebra computation with arbitrary signatures.
+A .NET 8 library for Geometric Algebra computation with arbitrary $(p,q,r)$ signature.
 
 ## Features
 - Multivector operations: addition, subtraction, geometric product (`*`), wedge product (`^`), negation
@@ -55,6 +55,3 @@ Each blade is uniquely identified by its index, with each bit representing the p
 ```bash
 dotnet test
 ```
-
-## Status
-Stable - Version 1.0
