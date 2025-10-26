@@ -1,4 +1,4 @@
-﻿namespace SGA.Tests
+﻿namespace SimGA.Tests
 {
     public class ToStringTests
     {

@@ -1,4 +1,4 @@
-﻿namespace SGA
+﻿namespace SimGA
 {
     public static class Algebra
     {

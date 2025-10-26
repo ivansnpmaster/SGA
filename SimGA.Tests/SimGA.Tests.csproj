@@ -17,7 +17,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\SGA\SGA.csproj" />
+    <ProjectReference Include="..\SimGA\SimGA.csproj" />
   </ItemGroup>
 
   <ItemGroup>

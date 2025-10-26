@@ -1,4 +1,4 @@
-﻿namespace SGA.Tests.GeometricProduct
+﻿namespace SimGA.Tests.GeometricProduct
 {
     public class GeometricProductEuclidean2DAlgebraTests
     {

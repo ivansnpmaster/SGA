@@ -1,4 +1,4 @@
-# SGA - Simple Geometric Algebra
+# SimGA - Simple Geometric Algebra
 
 A .NET 8 library for Geometric Algebra computation with arbitrary $(p,q,r)$ signature.
 
@@ -13,7 +13,7 @@ A .NET 8 library for Geometric Algebra computation with arbitrary $(p,q,r)$ sign
 
 ## Example usage
 ```csharp
-using SGA;
+using SimGA;
 
 Algebra.Set(3, 0, 0); // 3D Euclidean algebra
 var e1 = Multivector.CreateBaseBlade(1);

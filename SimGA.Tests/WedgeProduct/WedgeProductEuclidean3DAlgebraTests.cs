@@ -1,4 +1,4 @@
-﻿namespace SGA.Tests.WedgeProduct
+﻿namespace SimGA.Tests.WedgeProduct
 {
     public class WedgeProductEuclidean3DAlgebraTests
     {
