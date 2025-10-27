@@ -11,10 +11,10 @@
 
             /*
                 O produto geométrico entre dois multivetores é calculado como a soma dos produtos geométricos de todas as combinações de suas componentes. 
-                    C = A × B = Σᵢ Σⱼ (aᵢ * bⱼ) * (bladeᵢ × bladeⱼ)
+                    C = A * B = Σᵢ Σⱼ (aᵢ * bⱼ) * (bladeᵢ * bladeⱼ)
                 Onde:
                     - aᵢ, bⱼ são coeficientes escalares
-                    - bladeᵢ × bladeⱼ é o produto geométrico entre as blades
+                    - bladeᵢ * bladeⱼ é o produto geométrico entre as blades
                 O resultado é acumulado no blade apropriado com o sinal correto.
             */
 
@@ -46,8 +46,8 @@
                     */
                     double sign = Algebra.GetGeometricProductSign(i, j);
 
-                    // A contribuição deste par específico (blade i de A × blade j de B) para
-                    // o resultado final é: sinal × coeficienteA × coeficienteB
+                    // A contribuição deste par específico (blade i de A * blade j de B) para
+                    // o resultado final é: sinal * coeficienteA * coeficienteB
                     resultCoefficients[resultBlade] += sign * a[i] * b[j];
                 }
             }
@@ -101,9 +101,9 @@
 
         public static Multivector operator +(Multivector a, Multivector b)
         {
-            var result = new double[a.Dimension];
+            var result = new double[Algebra.Dimension];
 
-            for (int i = 0; i < a.Dimension; i++)
+            for (int i = 0; i < Algebra.Dimension; i++)
             {
                 result[i] = a[i] + b[i];
             }
@@ -113,9 +113,9 @@
 
         public static Multivector operator -(Multivector a)
         {
-            var result = new double[a.Dimension];
+            var result = new double[Algebra.Dimension];
 
-            for (int i = 0; i < a.Dimension; i++)
+            for (int i = 0; i < Algebra.Dimension; i++)
             {
                 result[i] = -a[i];
             }
@@ -125,9 +125,9 @@
 
         public static Multivector operator -(Multivector a, Multivector b)
         {
-            var result = new double[a.Dimension];
+            var result = new double[Algebra.Dimension];
 
-            for (int i = 0; i < a.Dimension; i++)
+            for (int i = 0; i < Algebra.Dimension; i++)
             {
                 result[i] = a[i] - b[i];
             }
@@ -137,9 +137,9 @@
 
         public static Multivector operator *(double scalar, Multivector other)
         {
-            var result = new double[other.Dimension];
+            var result = new double[Algebra.Dimension];
 
-            for (int i = 0; i < other.Dimension; i++)
+            for (int i = 0; i < Algebra.Dimension; i++)
             {
                 result[i] = scalar * other[i];
             }
@@ -165,14 +165,9 @@
                 return false;
             }
 
-            if (Dimension != other.Dimension)
-            {
-                return false;
-            }
-
             const double tolerance = 1e-10;
 
-            for (int i = 0; i < Dimension; i++)
+            for (int i = 0; i < Algebra.Dimension; i++)
             {
                 if (Math.Abs(_coefficients[i] - other._coefficients[i]) > tolerance)
                 {
@@ -188,7 +183,7 @@
             // Combina todos os coeficientes em uma sequência determinística
             var hash = new HashCode();
 
-            for (int i = 0; i < Dimension; i++)
+            for (int i = 0; i < Algebra.Dimension; i++)
             {
                 hash.Add(_coefficients[i]);
             }

@@ -18,8 +18,8 @@
             var e31 = e3 ^ e1;
 
             // Assert
-            Assert.Equal(1.0, e12[3], 10);  // e12
-            Assert.Equal(1.0, e23[6], 10);  // e23  
+            Assert.Equal(1.0, e12[3], 10); // e12
+            Assert.Equal(1.0, e23[6], 10); // e23  
             Assert.Equal(-1.0, e31[5], 10); // e31 = -e13
         }
 
@@ -36,7 +36,7 @@
             var rightAssociative = e1 ^ (e2 ^ e3);
 
             // Assert - Both should be equal to e123
-            Assert.Equal(1.0, leftAssociative[7], 10);  // e123
+            Assert.Equal(1.0, leftAssociative[7], 10); // e123
             Assert.Equal(1.0, rightAssociative[7], 10); // e123
             Assert.Equal(leftAssociative[7], rightAssociative[7], 10);
         }
@@ -79,7 +79,7 @@
             var e2 = Multivector.CreateBaseBlade(2);
             var e3 = Multivector.CreateBaseBlade(4);
 
-            // Act - In 3D, a ^ b is dual to the cross product a × b
+            // Act - In 3D, a ^ b is dual to the cross product a * b
             var wedge = e1 ^ e2;
 
             // Assert - e1 ^ e2 = e12, which is dual to e3

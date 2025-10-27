@@ -5,7 +5,7 @@
         public GeometricProductComplexAlgebraTests() => Algebra.Set(0, 2, 0);
 
         [Fact]
-        public void GeometricProduct_ComplexNumbers_ImaginaryUnitSquaresToMinusOne()
+        public void GeometricProduct_ImaginaryUnitSquaresToMinusOne()
         {
             // Arrange
             var i = new Multivector(0, 0, 0, 1.0); // i = e12
@@ -19,7 +19,7 @@
         }
 
         [Fact]
-        public void GeometricProduct_ComplexNumbers_ComplexMultiplication()
+        public void GeometricProduct_ComplexMultiplication()
         {
             // Arrange
             var z1 = new Multivector(2.0, 0, 0, 3.0); // 2 + 3i
@@ -29,7 +29,7 @@
             var product = z1 * z2;
 
             // Assert
-            // (2 + 3i) × (1 + 4i) = 2×1 + 2×4i + 3i×1 + 3i×4i 
+            // (2 + 3i) * (1 + 4i) = 2*1 + 2*4i + 3i*1 + 3i*4i 
             // = 2 + 8i + 3i + 12i² = 2 + 11i - 12 = -10 + 11i
             Assert.Equal(-10.0, product[0], 10); // Real part
             Assert.Equal(11.0, product[3], 10); // Imaginary part (e12)
@@ -40,7 +40,7 @@
         }
 
         [Fact]
-        public void GeometricProduct_ComplexNumbers_ComplexConjugation_Corrected()
+        public void GeometricProduct_ComplexConjugation_Corrected()
         {
             // Arrange
             var z = new Multivector(3.0, 0, 0, 4.0); // 3 + 4i
@@ -50,13 +50,13 @@
             var normSquared = z * conjugate;
 
             // Assert
-            // (3 + 4i) × (3 - 4i) = 9 - 12i + 12i - 16i² = 9 + 16 = 25
+            // (3 + 4i) * (3 - 4i) = 9 - 12i + 12i - 16i² = 9 + 16 = 25
             Assert.Equal(25.0, normSquared[0], 10);
             Assert.True(normSquared.IsScalar());
         }
 
         [Fact]
-        public void GeometricProduct_ComplexNumbers_CommutativeInEvenSubalgebra()
+        public void GeometricProduct_CommutativeInEvenSubalgebra()
         {
             // Arrange
             var z1 = new Multivector(2.0, 0, 0, 3.0); // 2 + 3i
@@ -72,14 +72,14 @@
         }
 
         [Fact]
-        public void GeometricProduct_ComplexNumbers_Rotation()
+        public void GeometricProduct_Rotation()
         {
             // Arrange
             var i = new Multivector(0, 0, 0, 1.0); // i = e12
             var realNumber = new Multivector(2.0); // 2 + 0i
 
             // Act
-            var rotated = i * realNumber; // i × 2 = 2i
+            var rotated = i * realNumber; // i * 2 = 2i
 
             // Assert
             Assert.Equal(0.0, rotated[0], 10); // Real part zero
@@ -87,7 +87,7 @@
         }
 
         [Fact]
-        public void GeometricProduct_ComplexNumbers_WithVectors_AntiCommute()
+        public void GeometricProduct_WithVectorsAntiCommute()
         {
             // Arrange
             var e1 = Multivector.CreateBaseBlade(1); // e1
@@ -98,14 +98,14 @@
             var i_e1 = i * e1;
 
             // Assert - e1 anti-commutes with i (because i contains e2)
-            // e1 × e12 = e1 × e1e2 = (e1 × e1) × e2 = (-1) × e2 = -e2
-            // e12 × e1 = e1e2 × e1 = e1e2e1 = -e1e1e2 = -(-1)×e2 = e2
-            Assert.Equal(-1.0, e1_i[2], 10); // e1 × i = -e2
-            Assert.Equal(1.0, i_e1[2], 10); // i × e1 = e2
+            // e1 * e12 = e1 * e1e2 = (e1 * e1) * e2 = (-1) * e2 = -e2
+            // e12 * e1 = e1e2 * e1 = e1e2e1 = -e1e1e2 = -(-1)*e2 = e2
+            Assert.Equal(-1.0, e1_i[2], 10); // e1 * i = -e2
+            Assert.Equal(1.0, i_e1[2], 10); // i * e1 = e2
         }
 
         [Fact]
-        public void GeometricProduct_VectorSquares_EqualMinusOne()
+        public void GeometricProduct_VectorSquaresEqualMinusOne()
         {
             // Arrange
             var e1 = Multivector.CreateBaseBlade(1); // e1
@@ -121,7 +121,7 @@
         }
 
         [Fact]
-        public void GeometricProduct_Vectors_AntiCommute()
+        public void GeometricProduct_VectorsAntiCommute()
         {
             // Arrange
             var e1 = Multivector.CreateBaseBlade(1);
@@ -137,7 +137,7 @@
         }
 
         [Fact]
-        public void GeometricProduct_BivectorSquares_ToMinusOne()
+        public void GeometricProduct_BivectorSquaresToMinusOne()
         {
             // Arrange
             var e1 = Multivector.CreateBaseBlade(1);
@@ -152,7 +152,7 @@
         }
 
         [Fact]
-        public void GeometricProduct_ScalarWithBivector_ScalesBivector()
+        public void GeometricProduct_ScalarWithBivectorScalesBivector()
         {
             // Arrange
             var scalar = new Multivector(2.0);
@@ -166,7 +166,7 @@
         }
 
         [Fact]
-        public void GeometricProduct_BivectorWithScalar_ScalesBivector()
+        public void GeometricProduct_BivectorWithScalarScalesBivector()
         {
             // Arrange
             var scalar = new Multivector(2.0);
@@ -180,7 +180,7 @@
         }
 
         [Fact]
-        public void GeometricProduct_ZeroElement_AnnihilatesAll()
+        public void GeometricProduct_ZeroElementAnnihilatesAll()
         {
             // Arrange
             var zero = new Multivector();

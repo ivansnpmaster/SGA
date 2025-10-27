@@ -25,7 +25,12 @@
 
         public Multivector(params double[] coefficients)
         {
-            if (coefficients.Length < Algebra.Dimension)
+            // Perfect case: array of exact size
+            if (coefficients.Length == Algebra.Dimension)
+            {
+                _coefficients = coefficients;
+            }
+            else if (coefficients.Length < Algebra.Dimension)
             {
                 // Creates a new array with the exact size of the algebra (all zeros by default)
                 _coefficients = new double[Algebra.Dimension];
@@ -34,21 +39,14 @@
                 // The rest remains zero automatically
                 Array.Copy(coefficients, _coefficients, coefficients.Length);
             }
-            else if (coefficients.Length > Algebra.Dimension)
+            else
             {
                 // Array larger than the algebra dimension - this is an error
                 throw new ArgumentException($"INCOMPATIBLE DIMENSIONALITY: Provided {coefficients.Length} coefficients, but the configured algebra supports only {Algebra.Dimension}. Check the algebra signature or adjust the number of coefficients.");
             }
-            else
-            {
-                // Perfect case: array of exact size
-                _coefficients = coefficients;
-            }
         }
 
         public double this[int bladeIndex] => _coefficients[bladeIndex];
-
-        public int Dimension => _coefficients.Length;
 
         public static Multivector CreateBaseBlade(int bladeIndex)
         {
@@ -80,12 +78,14 @@
             // Returns the homogeneous part of grade 'k' of the multivector
             // Iterates over all blades: if it has popcount == k, copies the coefficient
 
-            var res = new double[Dimension];
+            var res = new double[Algebra.Dimension];
 
-            for (int blade = 0; blade < Dimension; blade++)
+            for (int blade = 0; blade < Algebra.Dimension; blade++)
             {
                 if (BladeGrade(blade) == k)
+                {
                     res[blade] = _coefficients[blade];
+                }
             }
 
             return new Multivector(res);
@@ -95,7 +95,7 @@
         {
             var parts = new List<string>();
 
-            for (int i = 0; i < Dimension; i++)
+            for (int i = 0; i < Algebra.Dimension; i++)
             {
                 if (_coefficients[i] != 0.0)
                 {
@@ -146,10 +146,12 @@
 
         public bool IsScalar()
         {
-            for (int i = 1; i < Dimension; i++)
+            for (int i = 1; i < Algebra.Dimension; i++)
             {
                 if (_coefficients[i] != 0)
+                {
                     return false;
+                }
             }
 
             return true;
@@ -159,7 +161,7 @@
         {
             if (tolerance == 0.0)
             {
-                for (int i = 0; i < Dimension; i++)
+                for (int i = 0; i < Algebra.Dimension; i++)
                 {
                     if (_coefficients[i] != 0.0)
                     {
@@ -171,7 +173,7 @@
             }
             else
             {
-                for (int i = 0; i < Dimension; i++)
+                for (int i = 0; i < Algebra.Dimension; i++)
                 {
                     if (Math.Abs(_coefficients[i]) > tolerance)
                     {

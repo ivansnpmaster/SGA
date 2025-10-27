@@ -9,7 +9,7 @@ A .NET 8 library for Geometric Algebra computation with arbitrary $(p,q,r)$ sign
 - Operator overloading for natural C# syntax
 - Grade projection and blade extraction
 - Human-readable output for multivectors
-- Unit tests ![??](https://img.shields.io/badge/69/69%20passing-brightgreen)
+- Unit tests ![??](https://img.shields.io/badge/74/74%20passing-brightgreen)
 
 ## Example usage
 ```csharp

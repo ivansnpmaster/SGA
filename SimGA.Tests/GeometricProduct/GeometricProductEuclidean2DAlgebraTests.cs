@@ -58,7 +58,7 @@
             var vector = new Multivector(0, 3.0, 4.0, 0); // 3e1 + 4e2
             var mirror = new Multivector(0, 1.0, 0, 0);   // e1 (mirror on y axis)
 
-            // Act - Reflection: v' = -m × v × m
+            // Act - Reflection: v' = -m * v * m
             var reflected = (-mirror) * vector * mirror;
 
             // Assert - Reflection on y axis should invert x component
